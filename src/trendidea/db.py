@@ -73,7 +73,8 @@ CREATE TABLE IF NOT EXISTS reports (
     date TEXT NOT NULL,
     markdown_path TEXT,
     telegram_summary TEXT DEFAULT '',
-    scanned_sources_json TEXT DEFAULT '[]'
+    scanned_sources_json TEXT DEFAULT '[]',
+    trends_json TEXT DEFAULT '[]'
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -236,13 +237,14 @@ class Database:
     def add_report(self, report: Report) -> int:
         cur = self.conn.execute(
             "INSERT INTO reports (run_id, date, markdown_path, telegram_summary, "
-            "scanned_sources_json) VALUES (?,?,?,?,?)",
+            "scanned_sources_json, trends_json) VALUES (?,?,?,?,?,?)",
             (
                 report.run_id,
                 report.date,
                 report.markdown_path,
                 report.telegram_summary,
                 json.dumps(report.scanned_sources, ensure_ascii=False),
+                json.dumps(report.trends, ensure_ascii=False),
             ),
         )
         self.conn.commit()
@@ -262,6 +264,21 @@ class Database:
             markdown_path=r["markdown_path"],
             telegram_summary=r["telegram_summary"],
             scanned_sources=json.loads(r["scanned_sources_json"]),
+            trends=json.loads(r["trends_json"]),
+        )
+
+    def get_latest_report(self) -> Report | None:
+        r = self.conn.execute("SELECT * FROM reports ORDER BY id DESC LIMIT 1").fetchone()
+        if r is None:
+            return None
+        return Report(
+            id=r["id"],
+            run_id=r["run_id"],
+            date=r["date"],
+            markdown_path=r["markdown_path"],
+            telegram_summary=r["telegram_summary"],
+            scanned_sources=json.loads(r["scanned_sources_json"]),
+            trends=json.loads(r["trends_json"]),
         )
 
     # --- sessions ---------------------------------------------------------
