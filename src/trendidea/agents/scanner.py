@@ -8,6 +8,8 @@ from trendidea.agents.sources.base import ScanResult, Source
 from trendidea.agents.sources.github_trending import GitHubTrendingSource
 from trendidea.agents.sources.google_trends import GoogleTrendsSource
 from trendidea.agents.sources.hackernews import HackerNewsSource
+from trendidea.agents.sources.producthunt import ProductHuntSource
+from trendidea.agents.sources.reddit import RedditSource
 from trendidea.agents.sources.rss import RSSSource
 from trendidea.config import Settings
 from trendidea.models import Signal
@@ -22,6 +24,8 @@ def default_sources() -> list[Source]:
         GitHubTrendingSource(),
         GoogleTrendsSource(),
         RSSSource(),
+        RedditSource(),
+        ProductHuntSource(),
     ]
 
 
