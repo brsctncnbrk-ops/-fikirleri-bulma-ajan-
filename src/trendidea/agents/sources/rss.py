@@ -26,12 +26,18 @@ class RSSSource(Source):
     name = "rss"
 
     def __init__(self, feeds: list[str] | None = None) -> None:
-        self.feeds = feeds if feeds is not None else DEFAULT_FEEDS
+        # None = resolve from settings at fetch time (config-driven, no fabrication)
+        self.feeds = feeds
+
+    def _resolve_feeds(self, settings: Settings) -> list[str]:
+        if self.feeds is not None:
+            return self.feeds
+        return settings.rss_feed_list or DEFAULT_FEEDS
 
     def fetch(self, settings: Settings, window_hours: int, limit: int = 30) -> list[Signal]:
         signals: list[Signal] = []
         with httpx.Client(timeout=15.0) as client:
-            for feed_url in self.feeds:
+            for feed_url in self._resolve_feeds(settings):
                 try:
                     xml = request_text(feed_url, client=client)
                     signals.extend(self._parse_feed(xml))

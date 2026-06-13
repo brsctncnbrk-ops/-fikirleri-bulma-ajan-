@@ -18,3 +18,5 @@
 - Telegram komut yönlendirme + bot adaptörü (TASK-013).
 - Orchestrator + APScheduler + Telegram servisi + `--dry-run`; `runs/` denetim artefaktları (TASK-014).
 - Dockerfile + railway.json + dağıtım/kurulum dokümantasyonu (TASK-015).
+- Raporda LLM token kullanımı + opsiyonel USD maliyet tahmini (fiyat uydurulmaz) (TASK-016).
+- Yapılandırılabilir RSS besleme listesi (RSS_FEEDS env) (TASK-017).

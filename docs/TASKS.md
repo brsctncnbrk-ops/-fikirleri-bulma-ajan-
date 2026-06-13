@@ -142,6 +142,24 @@ bu geliştirme ortamında Docker daemon olmadığından çalıştırılamadı �
 ortamda doğrulanmalı (tech-debt: CI'da docker build adımı eklenebilir).
 Durum: Tamamlandı
 
+ID: TASK-016
+Görev: LLM token kullanımı + opsiyonel maliyet tahminini raporda göster (Bölüm 9)
+Öncelik: Orta
+Bağımlılıklar: TASK-012, TASK-014
+Etkilenen Dosyalar: config.py, logging_conf.py, models.py, agents/reporter.py, orchestrator.py, tests/test_cost.py
+Tamamlanma Kriteri: Rapor token kullanımını gösterir; fiyat girilmişse $ tahmini; fiyat uydurulmaz
+Test Gereksinimi: Var
+Durum: Tamamlandı
+
+ID: TASK-017
+Görev: RSS besleme listesini yapılandırılabilir yap (RSS_FEEDS env)
+Öncelik: Düşük
+Bağımlılıklar: TASK-006
+Etkilenen Dosyalar: config.py, agents/sources/rss.py, .env.example, tests/test_rss_config.py
+Tamamlanma Kriteri: Feed listesi env'den okunur, boşsa varsayılana düşer; test geçer
+Test Gereksinimi: Var
+Durum: Tamamlandı
+
 ---
 
 ## Oturum Günlüğü
@@ -155,3 +173,9 @@ Durum: Tamamlandı
   Telegram) anahtarlar girilince doğrulanacak. `docker build` daemon olmadığından doğrulanamadı.
 - Sonraki adım: Kullanıcı anahtarları girer (docs/SETUP.md), `python -m trendidea.main` ile
   tam akış denenir; Railway deploy (docs/DEPLOYMENT.md). Faz 2: Reddit/PH tam entegrasyon, RSS feed listesi.
+
+### 2026-06-13 (devam)
+- Tamamlandı: TASK-016 (raporda token/maliyet görünürlüğü — Bölüm 9 boşluğu kapatıldı),
+  TASK-017 (yapılandırılabilir RSS beslemeleri).
+- Doğrulama: 69 test geçti, ruff temiz, dry-run raporunda "💸 LLM kullanımı" satırı görünüyor.
+- Sonraki adım: değişmedi — kullanıcı anahtarlarıyla tam akış + Railway deploy.
