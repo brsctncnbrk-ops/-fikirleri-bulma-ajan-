@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+
+# Secrets & env
+.env
+.env.*
+!.env.example
+
+# Database & runtime artifacts
+*.db
+*.sqlite
+*.sqlite3
+/runs/*
+!/runs/.gitkeep
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

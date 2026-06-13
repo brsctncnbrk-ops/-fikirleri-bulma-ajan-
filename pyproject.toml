@@ -1,0 +1,26 @@
+[project]
+name = "trendidea"
+version = "0.1.0"
+description = "Multi-agent system that scans daily trends and produces evidence-backed business ideas"
+requires-python = ">=3.11"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "W"]
+ignore = ["B008"]  # function-call-in-default-argument (FastAPI/typer style is fine)
+
+[tool.ruff.lint.isort]
+known-first-party = ["trendidea"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+pythonpath = ["src"]
+addopts = "-q"
