@@ -20,3 +20,9 @@
 - Dockerfile + railway.json + dağıtım/kurulum dokümantasyonu (TASK-015).
 - Raporda LLM token kullanımı + opsiyonel USD maliyet tahmini (fiyat uydurulmaz) (TASK-016).
 - Yapılandırılabilir RSS besleme listesi (RSS_FEEDS env) (TASK-017).
+
+### Fixed
+- Railway deploy sağlamlaştırma (TASK-018): `tzdata` eklendi (slim imajda zaman dilimi
+  çökmesini önler), `pyproject.toml`'a `[build-system]` ve `[project.dependencies]` eklendi
+  (`pip install .` artık kendi kendine yeterli), python-telegram-bot 22.x için `post_init`
+  builder üzerinden veriliyor.

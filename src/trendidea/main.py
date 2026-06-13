@@ -110,7 +110,6 @@ def _serve(settings: Settings, db: Database) -> None:
 
     router = _build_router(settings, db)
     bot = TelegramBot(settings.telegram_bot_token, router)
-    app = bot.build_application()
 
     async def _daily_job() -> None:
         report = run_pipeline_once(settings, db, dry_run=False)
@@ -126,7 +125,7 @@ def _serve(settings: Settings, db: Database) -> None:
         scheduler.start()
         logger.info("scheduler started", extra={"hour": settings.daily_report_hour})
 
-    app.post_init = _post_init
+    app = bot.build_application(post_init=_post_init)
     logger.info("bot starting")
     app.run_polling()
 

@@ -160,6 +160,15 @@ Tamamlanma Kriteri: Feed listesi env'den okunur, boşsa varsayılana düşer; te
 Test Gereksinimi: Var
 Durum: Tamamlandı
 
+ID: TASK-018
+Görev: Railway deploy sağlamlaştırma (tzdata, build-system, pyproject deps, PTB post_init, DEPLOYMENT rehberi)
+Öncelik: Yüksek
+Bağımlılıklar: TASK-014, TASK-015
+Etkilenen Dosyalar: pyproject.toml, requirements.txt, telegram/bot.py, main.py, docs/DEPLOYMENT.md
+Tamamlanma Kriteri: `pip install .` kendi kendine yeterli; izole venv'de Docker kurulum sırası doğrulandı; PTB app post_init ile inşa edilir; deploy adımları net
+Test Gereksinimi: Yok (config/deploy; mevcut testler regresyona karşı yeşil)
+Durum: Tamamlandı
+
 ---
 
 ## Oturum Günlüğü
@@ -178,4 +187,13 @@ Durum: Tamamlandı
 - Tamamlandı: TASK-016 (raporda token/maliyet görünürlüğü — Bölüm 9 boşluğu kapatıldı),
   TASK-017 (yapılandırılabilir RSS beslemeleri).
 - Doğrulama: 69 test geçti, ruff temiz, dry-run raporunda "💸 LLM kullanımı" satırı görünüyor.
-- Sonraki adım: değişmedi — kullanıcı anahtarlarıyla tam akış + Railway deploy.
+
+### 2026-06-13 (Railway hazırlığı)
+- Tamamlandı: TASK-018 deploy sağlamlaştırma. Bulunan ve düzeltilen gerçek riskler:
+  (1) APScheduler 3.11 zoneinfo kullanıyor + pytz yok → slim imajda tz çökme riski → `tzdata` eklendi;
+  (2) `[build-system]` eksikti → eklendi; (3) `pip install .` çalışma-zamanı bağımlılıklarını
+  çekmiyordu (pyproject'te deps yoktu) → `[project.dependencies]` eklendi; (4) PTB 22.x için
+  `post_init` builder üzerinden veriliyor. İzole venv'de hem Docker sırası (requirements→paket)
+  hem de tek başına `pip install .` doğrulandı; 69 test yeşil.
+- Sonraki adım: Kullanıcı Railway'de repoyu bağlar, Variables + Volume ayarlar (docs/DEPLOYMENT.md),
+  ardından `/tara` ve `/bugun` ile canlı doğrulama. `docker build` Railway'de doğrulanacak (yerelde daemon yok).

@@ -1,8 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "trendidea"
 version = "0.1.0"
 description = "Multi-agent system that scans daily trends and produces evidence-backed business ideas"
 requires-python = ">=3.11"
+# Runtime dependencies (mirror of requirements.txt; requirements.txt is kept for
+# Docker layer caching and the documented pip workflow).
+dependencies = [
+    "anthropic>=0.40.0",
+    "python-telegram-bot>=21.0",
+    "APScheduler>=3.10.4",
+    "pydantic-settings>=2.2.0",
+    "httpx>=0.27.0",
+    "tzdata>=2024.1",
+    "praw>=7.7.1",
+    "pytrends>=4.9.2",
+    "beautifulsoup4>=4.12.3",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

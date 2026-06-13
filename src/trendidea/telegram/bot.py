@@ -15,11 +15,17 @@ class TelegramBot:
         self.router = router
         self._app = None
 
-    def build_application(self):
-        """Construct the PTB Application with a single text handler."""
+    def build_application(self, post_init=None):
+        """Construct the PTB Application with a single text handler.
+
+        post_init: optional async callback run once after init (e.g. start scheduler).
+        """
         from telegram.ext import Application, MessageHandler, filters
 
-        app = Application.builder().token(self.token).build()
+        builder = Application.builder().token(self.token)
+        if post_init is not None:
+            builder = builder.post_init(post_init)
+        app = builder.build()
 
         async def on_message(update, context):
             message = update.message
