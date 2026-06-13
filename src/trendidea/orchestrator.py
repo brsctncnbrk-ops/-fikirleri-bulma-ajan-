@@ -66,6 +66,9 @@ class Orchestrator:
             else:
                 ideas = self._generate_and_validate(clusters, run_rec.id, cost)
 
+            cost_estimate = cost.estimate_cost(
+                self.settings.price_input_per_mtok, self.settings.price_output_per_mtok
+            )
             previous = self.db.get_report_by_date(self._yesterday(today))
             report = self.reporter.build(
                 date=today,
@@ -75,10 +78,13 @@ class Orchestrator:
                 unknowns=unknowns,
                 run_id=run_rec.id,
                 previous_trends=previous.trends if previous else [],
+                token_usage=cost.total_tokens,
+                cost_estimate=cost_estimate,
+                cost_configured=self.settings.pricing_configured,
             )
             report.markdown_path = self._write_artifacts(run_rec.id, report, cost)
             self.db.add_report(report)
-            self.db.finish_run(run_rec.id, "success", cost.total_tokens, 0.0, error=None)
+            self.db.finish_run(run_rec.id, "success", cost.total_tokens, cost_estimate, error=None)
             logger.info(
                 "run complete",
                 extra={"run_id": run_rec.id, "ideas": len(ideas), "tokens": cost.total_tokens},

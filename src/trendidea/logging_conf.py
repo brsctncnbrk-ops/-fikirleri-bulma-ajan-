@@ -63,6 +63,14 @@ class CostTracker:
     def total_tokens(self) -> int:
         return self.input_tokens + self.output_tokens
 
+    def estimate_cost(self, price_input_per_mtok: float, price_output_per_mtok: float) -> float:
+        """USD estimate from configured per-1M-token prices (0 if not configured)."""
+        cost = (
+            self.input_tokens / 1_000_000 * price_input_per_mtok
+            + self.output_tokens / 1_000_000 * price_output_per_mtok
+        )
+        return round(cost, 4)
+
     def summary(self) -> dict:
         return {
             "calls": self.calls,

@@ -16,6 +16,9 @@ class Reporter:
         unknowns: list[str] | None = None,
         run_id: int | None = None,
         previous_trends: list[str] | None = None,
+        token_usage: int = 0,
+        cost_estimate: float = 0.0,
+        cost_configured: bool = False,
     ) -> Report:
         trend_lines = self._with_deltas(trends, previous_trends or [])
         report = Report(
@@ -25,9 +28,21 @@ class Reporter:
             ideas=ideas,
             unknowns=unknowns or [],
             run_id=run_id,
+            token_usage=token_usage,
+            cost_estimate=cost_estimate,
+            cost_configured=cost_configured,
         )
         report.telegram_summary = self.render_telegram_summary(report)
         return report
+
+    @staticmethod
+    def _cost_line(report: Report) -> str:
+        if report.cost_configured:
+            return f"💸 LLM kullanımı: {report.token_usage} token (≈ ${report.cost_estimate})"
+        return (
+            f"💸 LLM kullanımı: {report.token_usage} token "
+            f"(maliyet tahmini için fiyat yapılandırılmadı)"
+        )
 
     @staticmethod
     def _with_deltas(trends: list[str], previous: list[str]) -> list[str]:
@@ -92,6 +107,8 @@ class Reporter:
         lines.append("")
         unknowns = ", ".join(report.unknowns) if report.unknowns else "—"
         lines.append(f"⚠️ Bilinmeyenler (TBD): {unknowns}")
+        lines.append("")
+        lines.append(Reporter._cost_line(report))
         return "\n".join(lines)
 
     @staticmethod
@@ -101,10 +118,11 @@ class Reporter:
             f"📊 {report.date} — {len(report.ideas)} doğrulanmış fikir "
             f"({ok_count}/{len(report.scanned_sources)} kaynak tarandı)"
         )
+        cost = Reporter._cost_line(report)
         if not report.ideas:
-            return head + "\nBugün kanıtlı fikir çıkmadı."
+            return f"{head}\nBugün kanıtlı fikir çıkmadı.\n{cost}"
         tops = "\n".join(
             f"{i}. {idea.title} — {idea.confidence}/100"
             for i, idea in enumerate(report.ideas[:5], 1)
         )
-        return f"{head}\n\n{tops}\n\nDetay için /bugun"
+        return f"{head}\n\n{tops}\n\n{cost}\n\nDetay için /bugun"

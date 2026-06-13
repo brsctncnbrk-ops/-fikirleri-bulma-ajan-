@@ -79,6 +79,9 @@ class Report:
     unknowns: list[str] = field(default_factory=list)
     markdown_path: str | None = None
     telegram_summary: str = ""
+    token_usage: int = 0
+    cost_estimate: float = 0.0
+    cost_configured: bool = False
     run_id: int | None = None
     id: int | None = None
 

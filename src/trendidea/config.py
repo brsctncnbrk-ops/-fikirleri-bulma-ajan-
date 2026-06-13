@@ -34,6 +34,13 @@ class Settings(BaseSettings):
     # --- Model settings ---
     llm_model_reasoning: str = Field(default="claude-sonnet-4-6", alias="LLM_MODEL_REASONING")
     llm_model_cheap: str = Field(default="claude-haiku-4-5", alias="LLM_MODEL_CHEAP")
+    # Token pricing in USD per 1M tokens. Default 0 = not configured (no $ estimate
+    # shown; we never fabricate prices). Set these to your plan's current rates.
+    price_input_per_mtok: float = Field(default=0.0, alias="LLM_PRICE_INPUT_PER_MTOK")
+    price_output_per_mtok: float = Field(default=0.0, alias="LLM_PRICE_OUTPUT_PER_MTOK")
+
+    # Comma-separated RSS/Atom feed URLs (empty = built-in default list).
+    rss_feeds: str = Field(default="", alias="RSS_FEEDS")
 
     # --- Runtime settings ---
     daily_report_hour: int = Field(default=9, alias="DAILY_REPORT_HOUR")
@@ -58,6 +65,15 @@ class Settings(BaseSettings):
     @property
     def has_producthunt(self) -> bool:
         return bool(self.producthunt_token)
+
+    @property
+    def pricing_configured(self) -> bool:
+        return self.price_input_per_mtok > 0 or self.price_output_per_mtok > 0
+
+    @property
+    def rss_feed_list(self) -> list[str]:
+        """Parsed RSS feed URLs from config (empty -> caller falls back to default)."""
+        return [u.strip() for u in self.rss_feeds.split(",") if u.strip()]
 
     def missing_required(self) -> list[str]:
         """Return the names of required-but-missing settings for a full run."""
