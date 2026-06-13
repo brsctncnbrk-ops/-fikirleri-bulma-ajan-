@@ -7,6 +7,7 @@
 python3 -m venv .venv
 . .venv/bin/activate
 pip install -r requirements-dev.txt
+pip install -e .       # 'trendidea' paketini kur
 cp .env.example .env
 ```
 

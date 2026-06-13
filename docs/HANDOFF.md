@@ -10,11 +10,19 @@
 - TASK-001: iskelet + build/lint/test altyapısı (ruff temiz, pytest yeşil).
 - TASK-002: tam dokümantasyon seti (CLAUDE.md, README, .env.example, /docs/*).
 
+- TASK-003 → TASK-015 tamamlandı: config, DB, tüm kaynaklar, signal processor,
+  LLM wrapper (+web_search), idea generator, validator, reporter, telegram router,
+  orchestrator + dry-run, Docker + Railway config.
+- Doğrulama: 61 test geçti, ruff temiz, `--dry-run` uçtan uca çalıştı ve `runs/` altına rapor yazdı.
+
 ### Sırada
-- TASK-003: config (pydantic-settings) + logging + maliyet sayacı iskeleti.
-- Ardından TASK-004 (DB) → TASK-005+ (ajanlar).
+- Kullanıcı API anahtarlarını girer (docs/SETUP.md) ve `python -m trendidea.main` ile tam akışı dener.
+- Railway deploy (docs/DEPLOYMENT.md).
+- Faz 2: Reddit/Product Hunt tam doğrulama, RSS feed listesinin küratörlüğü, maliyet panosu.
 
 ### Açık sorunlar / TBD
-- Kullanıcının henüz API anahtarı yok; tam çalıştırma anahtarlar girilince doğrulanacak.
-- Bu remote ortamda dış ağ kısıtlı olabilir → canlı tarama Railway/kullanıcı ortamında doğrulanacak.
-- RSS besleme listesi, hedef niş ayrıntıları, rapor saati onayı TBD.
+- API anahtarları henüz yok; LLM fikir üretimi + Telegram tam akışı anahtarlar girilince doğrulanacak.
+- `docker build` bu ortamda Docker daemon olmadığından doğrulanamadı (Railway'de doğrulanmalı).
+- Bu remote ortamda HN/Google/hnrss 403 döndü (egress kısıtı); GitHub Trending çalıştı. Canlı
+  tarama kullanıcı ortamında tam doğrulanacak.
+- RSS besleme listesi, hedef niş ayrıntıları, günlük rapor saati onayı TBD.

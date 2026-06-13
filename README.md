@@ -10,6 +10,7 @@ Türkçe günlük rapor üretir ve Telegram üzerinden sunar.
 python3 -m venv .venv
 . .venv/bin/activate
 pip install -r requirements-dev.txt
+pip install -e .       # 'trendidea' paketini kur (python -m trendidea.main için)
 cp .env.example .env   # anahtarları doldur (bkz. docs/SETUP.md)
 ```
 
